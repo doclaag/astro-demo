@@ -1,0 +1,56 @@
+---
+interface Props {
+  success: string; 
+  details?: string; 
+  flight_number: string;
+  name: string;
+  date_utc: string;
+  img: string;
+}
+
+const {success, flight_number: flightNumber, img, details, date_utc: dateUTC, name} = Astro.props;
+const successBoolean = success === 'true'; 
+const formattedDate = new Date(dateUTC).toLocaleDateString('es-ES'); 
+---
+
+<a
+  class="rounded-lg border shadow-md bg-gray-800 border-gray-700 hover:scale-105 hover:bg-gray-700 hover:border-gray-500 transition flex flex-col justify-center items-center"
+>
+  <h3 class="p-4 text-3xl font-bold text-white">{name}</h3>
+  <picture class="flex justify-center p-4">
+    <img src={img} alt={`Parche para el lanzamiento ${name}`} class="mb-5 rounded-lg" /> <!-- Texto alternativo mejorado -->
+  </picture>
+
+  <header class="p-4 flex-grow">
+    <span
+      class:list={[
+        "text-xs font-semibold mr-2 px-2.5 py-0.5 rounded",
+        {
+          "bg-green-200 text-green-900": successBoolean,
+          "bg-red-200 text-red-900": !successBoolean
+        } 
+      ]}
+    >
+      {successBoolean ? 'Éxito' : 'Fracaso'}
+    </span>
+    <h2 class="my-2 text-2xl font-bold tracking-tight text-white">
+      Flight #{flightNumber}
+    </h2>
+
+    <p class="mb-4 font-light text-gray-400">
+      {
+        details 
+          ? details.length > 100
+            ? `${details.slice(0, 100)}...`
+            : details
+          : 'No details available.'
+      }
+    </p>
+    <p class="mb-4 font-light text-gray-400">
+      Date UTC:
+      <span class="font-semibold text-white">
+        {formattedDate}
+      </span>
+    </p>
+  </header>
+</a>

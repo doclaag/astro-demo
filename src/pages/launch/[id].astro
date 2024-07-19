@@ -1,0 +1,36 @@
+---
+import CardInfo from '../../components/CardInfo.astro';
+import Layout from "../../layouts/Layout.astro";
+import {getLatestLaunchBy} from "../../services/spacex";
+
+export const prerender = false;
+
+const {id} = Astro.params;
+
+let launch;
+if (id) {
+  launch = await getLatestLaunchBy({id});
+}
+
+/* export const getStaticPaths = async () => {
+
+  const launches = await getLatestLaunches();
+
+
+  return launches.map((launch) => ({
+    params: {id: launch.id},
+  }));
+} */
+---
+
+<Layout title=`${launch?.name}`>
+  <CardInfo
+    img=`${launch?.links?.patch?.small}`
+    success=`${launch?.success}`
+    flight_number=`${launch?.flight_number}`
+    details=`${launch?.details}`
+    date_utc=`${launch?.date_utc}`
+    name=`${launch?.name}`
+  />
+</Layout>
+
